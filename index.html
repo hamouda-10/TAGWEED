@@ -1,0 +1,2054 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق أحكام التجويد المتكامل</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary-dark: #0a1f3d;
+    --primary-medium: #1a3a6a;
+    --primary-light: #2a5a9a;
+    --accent-color: #4fc3f7;
+    --accent-dark: #0288d1;
+    --text-primary: #f5f5f5;
+    --text-secondary: #b0bec5;
+    --card-bg: rgba(26, 58, 106, 0.7);
+    --success-color: #00c206;
+    --warning-color: #ff9800;
+    --error-color: #e10f00;
+    --transition: all 0.3s ease;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 15px rgba(79, 195, 247, 0.3);
+    --gold-color: #ffd700;
+    --quran-color: #2e7d32;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    margin: 0;
+    width: 100vw;
+    max-width: 100vw;
+}
+
+.container {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    text-align: center;
+    background: url('https://images.unsplash.com/photo-1568219656418-15c329312bf1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+    padding: 30px 15px;
+    border-radius: 0;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 31, 61, 0.85);
+    z-index: 1;
+}
+
+.header-content {
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, var(--accent-color), #ffffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.tabs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 0 15px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tab-btn {
+    padding: 12px 25px;
+    background: var(--card-bg);
+    border: none;
+    border-radius: 50px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+}
+
+.tab-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.2), transparent);
+    transition: var(--transition);
+}
+
+.tab-btn:hover::before {
+    left: 100%;
+}
+
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--accent-color);
+    transform: scaleX(0);
+    transition: var(--transition);
+    transform-origin: right;
+}
+
+.tab-btn.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.tab-btn.active {
+    background: rgba(79, 195, 247, 0.2);
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.tab-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.filter-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    justify-content: flex-start;
+    position: relative;
+    padding: 0 15px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+}
+
+.filter-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.filter-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 0 15px;
+    margin-bottom: 20px;
+}
+
+.filter-container::-webkit-scrollbar-thumb {
+    background: var(--warning-color);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.filter-container::-webkit-scrollbar-thumb:hover {
+    background: #ffb300;
+}
+
+.filter-container {
+    scrollbar-color: var(--warning-color) rgba(255, 255, 255, 0.1);
+    scrollbar-width: thin;
+}
+
+.filter-container::after {
+    content: '';
+    display: block;
+    width: 90%;
+    height: 1px;
+    background: var(--accent-color);
+    margin: 30px auto;
+    border-radius: 2px;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+    border: 2px solid rgba(79, 195, 247, 0.3);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.filter-btn.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: var(--transition);
+}
+
+.filter-btn.active {
+    background: var(--accent-color);
+    color: var(--primary-dark);
+    font-weight: bold;
+}
+
+.tajweed-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    padding: 0 15px;
+}
+
+.tajweed-rule {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    transition: var(--transition);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(79, 195, 247, 0.2);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.tajweed-rule.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tajweed-rule::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--accent-color), var(--accent-dark));
+}
+
+.tajweed-rule:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.tajweed-title {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    position: relative;
+}
+
+.tajweed-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: 3px;
+}
+
+.tajweed-icon {
+    font-size: 1.6rem;
+    color: var(--gold-color);
+}
+
+.tajweed-example {
+    background: rgba(79, 195, 247, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    font-family: 'Amiri Quran', serif;
+    font-size: 1.6rem;
+    text-align: center;
+    line-height: 2.8rem;
+    color: #ffffff;
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+    direction: rtl;
+    position: relative;
+}
+
+.tajweed-desc {
+    line-height: 1.8;
+    font-size: 1rem;
+    text-align: justify;
+}
+
+.tajweed-audio-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid rgba(79, 195, 247, 0.3);
+}
+
+.tajweed-audio {
+    width: 100%;
+    outline: none;
+    border-radius: 8px;
+}
+
+.tajweed-audio::-webkit-media-controls-panel {
+    background: var(--primary-medium);
+}
+
+.tajweed-audio::-webkit-media-controls-play-button,
+.tajweed-audio::-webkit-media-controls-mute-button {
+    background-color: var(--accent-color);
+    border-radius: 50%;
+}
+
+.rating-container {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.rating-star {
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.4rem;
+    position: relative;
+}
+
+.rating-star::before {
+    content: '\f005';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: transparent;
+    background: linear-gradient(to right, var(--warning-color), var(--gold-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    width: 0;
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.rating-star.active::before {
+    width: 100%;
+}
+
+.rating-star:hover::before {
+    width: 100%;
+}
+
+.interactive-test {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(79, 195, 247, 0.3);
+    text-align: center;
+    margin: 0 15px;
+}
+
+.test-title {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
+.test-question {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.test-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    position: relative;
+}
+
+.test-options::after {
+    content: '';
+    display: block;
+    width: 90%;
+    height: 4px;
+    background: var(--accent-color);
+    margin: 30px auto 20px;
+    opacity: 0.8;
+    border-radius: 2px;
+}
+
+.test-option {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.test-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(79, 195, 247, 0.1), transparent);
+    transition: var(--transition);
+}
+
+.test-option:hover::before {
+    left: 100%;
+}
+
+.test-option:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-3px);
+}
+
+.test-option.selected {
+    background: rgba(79, 195, 247, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-hover);
+}
+
+.test-option.correct {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: var(--success-color);
+}
+
+.test-option.wrong {
+    background: rgba(244, 67, 54, 0.2);
+    border-color: var(--error-color);
+}
+
+.test-navigation {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 15px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.test-btn {
+    padding: 1.5vw 4vw;
+    background: var(--accent-color);
+    color: var(--primary-dark);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: bold;
+    min-width: 14vw;
+    font-size: 1.8vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7vw;
+    flex-shrink: 0;
+}
+
+.test-btn:nth-child(1) {
+    background: var(--error-color);
+    color: #ffffff;
+}
+
+.test-btn:nth-child(3) {
+    background: var(--success-color);
+}
+
+.test-btn:hover {
+    background: var(--accent-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.test-btn:nth-child(1):hover {
+    background: #d32f2f;
+    color: #ffffff;
+}
+
+.test-btn:nth-child(3):hover {
+    background: #388e3c;
+    color: white;
+}
+
+.test-btn:disabled {
+    background: var(--text-secondary);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.test-result {
+    font-size: 1.4rem;
+    margin-top: 15px;
+    color: var(--accent-color);
+    display: none;
+}
+
+.test-score {
+    font-size: 1.6rem;
+    color: var(--gold-color);
+    margin: 15px 0;
+    display: none;
+}
+
+.test-restart {
+    margin-top: 15px;
+    display: none;
+}
+
+.download-btn {
+    background: linear-gradient(to right, var(--accent-color), var(--accent-dark));
+    color: var(--primary-dark);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    font-size: 0.95rem;
+}
+
+.download-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: var(--transition);
+}
+
+.download-btn:hover::before {
+    left: 100%;
+}
+
+.download-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(79, 195, 247, 0.5);
+    background: linear-gradient(to right, var(--accent-dark), var(--accent-color));
+}
+
+.download-btn-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 15px;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-medium);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1001;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: var(--transition);
+    border-left: 4px solid var(--accent-color);
+    backdrop-filter: blur(5px);
+}
+
+.toast.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    border-left-color: var(--success-color);
+}
+
+.toast.warning {
+    border-left-color: var(--warning-color);
+}
+
+.toast.error {
+    border-left-color: var(--error-color);
+}
+
+.no-results {
+    text-align: center;
+    grid-column: 1 / -1;
+    padding: 40px 0;
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    border-radius: 15px;
+    margin: 0 15px;
+}
+
+.no-results-icon {
+    font-size: 3.5rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    70% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.tajweed-video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    margin: 15px 0;
+    border-radius: 8px;
+    background: #000;
+}
+
+.tajweed-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+@media (max-width: 1200px) {
+    .tajweed-section {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    h1 {
+        font-size: 2.4rem;
+    }
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    .tajweed-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    .subtitle {
+        font-size: 1rem;
+    }
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    .tajweed-rule {
+        padding: 15px;
+    }
+    .tajweed-example {
+        font-size: 1.4rem;
+        line-height: 2.4rem;
+    }
+    .test-title {
+        font-size: 1.4rem;
+    }
+    .test-btn {
+        padding: 1.8vw 3.8vw;
+        font-size: 2.2vw;
+        min-width: 16vw;
+        gap: 0.5vw;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        min-width: 100px;
+    }
+    .filter-btn {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        gap: 3px;
+    }
+    .tajweed-title {
+        font-size: 1.2rem;
+    }
+    .tajweed-desc {
+        font-size: 0.95rem;
+    }
+    .download-btn {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+    }
+    .test-options {
+        grid-template-columns: 1fr;
+    }
+    .test-navigation {
+        gap: 8px;
+    }
+    .test-btn {
+        padding: 2.2vw 4.5vw;
+        font-size: 3.2vw;
+        min-width: 18vw;
+        gap: 0.4vw;
+    }
+}
+
+@media (max-width: 400px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+    .tajweed-example {
+        font-size: 1.3rem;
+        line-height: 2.2rem;
+    }
+    .test-btn {
+        padding: 2.8vw 5.5vw;
+        font-size: 3.8vw;
+        min-width: 20vw;
+        gap: 0.3vw;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-quran"></i> تطبيق أحكام التجويد المتكامل</h1>
+                <p class="subtitle">مرجعك الشامل لتعلم أحكام التجويد بطريقة سهلة ومبسطة مع أمثلة صوتية وتطبيقات عملية</p>
+            </div>
+        </header>
+
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="rules">
+                    <i class="fas fa-book-open"></i> أحكام التجويد
+                </button>
+                <button class="tab-btn" data-tab="tests">
+                    <i class="fas fa-question-circle"></i> اختبارات تفاعلية
+                </button>
+            </div>
+            
+            <div class="download-btn-container">
+                <a href="https://www.alukah.net/Books/Files/Book_12438/BookFile/ahkamtagwied.pdf" download="كتيب أحكام التجويد الشامل.pdf">
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> تنزيل كتيب التجويد
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <div class="tab-content active" id="rules">
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="nun">النون الساكنة والتنوين</button>
+                <button class="filter-btn" data-filter="madd">المدود</button>
+                <button class="filter-btn" data-filter="qalqala">القلقلة</button>
+                <button class="filter-btn" data-filter="lam">أحكام الميم واللام</button>
+                <button class="filter-btn" data-filter="ghunna">الغنة</button>
+                <button class="filter-btn" data-filter="others">أحكام أخرى</button>
+            </div>
+
+            <div class="tajweed-section">
+                <!-- أحكام النون الساكنة والتنوين -->
+                <div class="tajweed-rule" data-category="nun">
+                    <h3 class="tajweed-title"><i class="fas fa-microphone-alt tajweed-icon"></i> الإظهار الحلقي</h3>
+                    <p class="tajweed-desc">
+                        الإظهار الحلقي هو إخراج كل حرف من مخرجه من غير غنة في الحرف المظهر، ويحدث عندما يأتي بعد النون الساكنة أو التنوين أحد حروف الحلق الستة: الهمزة، الهاء، العين، الحاء، الغين، الخاء. سمي حلقياً لأن حروفه تخرج من الحلق.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿مَنْ ءَامَنَ﴾ - ﴿غَفُورٌ رَحِيمٌ﴾ - ﴿مِنْ هَادٍ﴾ - ﴿مِنْ عِلْمٍ﴾ - ﴿مِنْ حَكِيمٍ﴾
+                        <br>﴿مِنْ غَفُورٍ﴾ - ﴿مِنْ خَيْرٍ﴾ - ﴿أَنْعَمْتَ عَلَيْهِمْ﴾ - ﴿وَمَنْ يَعْمَلْ﴾ - ﴿نَارٌ حَامِيَةٌ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/vUipkgOTEyI.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div class="tajweed-rule" data-category="nun">
+                    <h3 class="tajweed-title"><i class="fas fa-wave-square tajweed-icon"></i> الإدغام بغنة</h3>
+                    <p class="tajweed-desc">
+                        الإدغام بغنة هو إدخال حرف ساكن في حرف متحرك بحيث يصيران حرفاً واحداً مشدداً مع وجود غنة، ويحدث مع حروف (ي، ن، م، و) المجموعة في كلمة "ينمو". ينقسم الإدغام إلى قسمين: إدغام كامل بغنة (مع النون والميم) وإدغام ناقص بغنة (مع الواو والياء).
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿مِنْ نَفْسٍ﴾ - ﴿مِنْ وَرَائِهِمْ﴾ - ﴿مِنْ يَوْمِهِمْ﴾ - ﴿مِنْ مَالٍ﴾ - ﴿أَنْ يَقُولُوا﴾
+                        <br>﴿أَنْ وَعَدْنَا﴾ - ﴿أَنْ نَشَاءَ﴾ - ﴿مِنْ مِيثَاقِهِ﴾ - ﴿فَإِنْ لَمْ تَفْعَلُوا﴾ - ﴿مِنْ وَالٍ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/pbDXg2kBYN8.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div class="tajweed-rule" data-category="nun">
+                    <h3 class="tajweed-title"><i class="fas fa-exchange-alt tajweed-icon"></i> الإقلاب</h3>
+                    <p class="tajweed-desc">
+                        الإقلاب هو قلب النون الساكنة أو التنوين ميماً مخفاة بغنة عند الباء مع إخفاء الميم. ويكون مع حرف الباء فقط، ويسمى إقلاباً لأن النون تنقلب ميماً. ويتميز بظهور الغنة بمقدار حركتين والميم تكون مخفاة عند الباء.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿أَنبِئْهُمْ﴾ - ﴿سَمِيعٌ بَصِيرٌ﴾ - ﴿لَنُنَبِّئَهُمْ﴾ - ﴿مِنْ بَعْدِ﴾ - ﴿حَكِيمٌ بَصِيرٌ﴾
+                        <br>﴿أَنْبِتَكُمْ﴾ - ﴿مِنْ بَنِينَ﴾ - ﴿نَذِيرٌ بَيِّنٌ﴾ - ﴿أَنْبَتَتْ﴾ - ﴿مِنْ بَأْسِهِمْ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/8Tl8tKlbi0I.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div class="tajweed-rule" data-category="nun">
+                    <h3 class="tajweed-title"><i class="fas fa-eye-slash tajweed-icon"></i> الإخفاء الحقيقي</h3>
+                    <p class="tajweed-desc">
+                        الإخفاء الحقيقي هو نطق النون الساكنة أو التنوين بحالة متوسطة بين الإظهار والإدغام مع بقاء الغنة، ويحدث مع خمسة عشر حرفاً وهي: ص، ذ، ث، ك، ج، ش، ق، س، د، ط، ز، ف، ت، ض، ظ. سمي حقيقياً لتحقق الإخفاء فيه بخلاف الإخفاء الشفوي.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿مِنْ صَٰلِحٍ﴾ - ﴿نَذِيرٌ لِّلْبَشَرِ﴾ - ﴿مِنْ ثَمَرَةٍ﴾ - ﴿مِنْ كُلِّ﴾ - ﴿مِنْ جَنَّةٍ﴾
+                        <br>﴿مِنْ شَرٍّ﴾ - ﴿مِنْ قَبْلِ﴾ - ﴿مِنْ سُورَةٍ﴾ - ﴿مِنْ دَابَّةٍ﴾ - ﴿مِنْ طَيِّبَاتِ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/RnjxY7JQVKc.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام المدود -->
+                <div class="tajweed-rule" data-category="madd">
+                    <h3 class="tajweed-title"><i class="fas fa-arrows-alt-h tajweed-icon"></i> المد الطبيعي</h3>
+                    <p class="tajweed-desc">
+                        المد الطبيعي هو المد الذي لا يتوقف على سبب مثل همز أو سكون، ومدته حركتان (قدر نطق "لا إله" بسرعة معتدلة). حروف المد ثلاثة: الألف الساكنة المفتوح ما قبلها، الواو الساكنة المضموم ما قبلها، الياء الساكنة المكسور ما قبلها. وهو أساس جميع أنواع المدود.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿قَالُوا﴾ - ﴿الرَّحِيمِ﴾ - ﴿نَسِيَ﴾ - ﴿يَخْشَى﴾ - ﴿يُوحَى﴾
+                        <br>﴿قَضَى﴾ - ﴿يَدْعُو﴾ - ﴿يَرْضَى﴾ - ﴿يَشْفِ﴾ - ﴿يَهْدِي﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/gTWNPNT5Q0I.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div class="tajweed-rule" data-category="madd">
+                    <h3 class="tajweed-title"><i class="fas fa-long-arrow-alt-right tajweed-icon"></i> المد المنفصل</h3>
+                    <p class="tajweed-desc">
+                        المد المنفصل هو أن يأتي حرف المد في آخر الكلمة والهمزة في أول الكلمة التي تليها، ويمد أربع أو خمس حركات. مثل: ﴿إِنَّا أَنزَلْنَاهُ﴾ حيث الألف في "إِنَّا" والهمزة في "أَنزَلْنَاهُ". سمي منفصلاً لأن الحرف المدود والهمزة في كلمتين منفصلتين.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿إِنَّا أَنزَلْنَاهُ﴾ - ﴿الرَّحْمَٰنِ عَلَّمَ﴾ - ﴿وَمَا أَدْرَاكَ﴾ - ﴿إِنِّي أَخَافُ﴾ - ﴿قُلْ أَعُوذُ﴾
+                        <br>﴿إِنَّهُ أَنَا﴾ - ﴿تَبَارَكَ اسْمُ﴾ - ﴿يَا أَيُّهَا﴾ - ﴿إِنَّا أَعْطَيْنَاكَ﴾ - ﴿وَلَا أَدْرِي﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/fI28o9WhYxA.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div class="tajweed-rule" data-category="madd">
+                    <h3 class="tajweed-title"><i class="fas fa-link tajweed-icon"></i> المد المتصل</h3>
+                    <p class="tajweed-desc">
+                        المد المتصل هو أن يأتي حرف المد والهمزة في كلمة واحدة، ويمد أربع أو خمس حركات. مثل: ﴿السَّمَاءَ﴾ حيث الألف والهمزة في كلمة واحدة. وهو أقوى من المد المنفصل. سمي متصلاً لأن الحرف المدود والهمزة في كلمة واحدة متصلة.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿السَّمَاءَ﴾ - ﴿جَاءَ﴾ - ﴿سَوَاءٌ﴾ - ﴿الضَّلَالَ﴾ - ﴿الضَّالِّينَ﴾
+                        <br>﴿الْجَنَّةَ﴾ - ﴿الْقُرْآنَ﴾ - ﴿الرِّجَالَ﴾ - ﴿الْمَاءَ﴾ - ﴿الْبَأْسَاءِ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/p88KYCMM4Ik.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <div class="tajweed-rule" data-category="madd">
+                    <h3 class="tajweed-title"><i class="fas fa-clock tajweed-icon"></i> المد اللازم</h3>
+                    <p class="tajweed-desc">
+                        المد اللازم هو أن يأتي بعد حرف المد سكون أصلي في كلمة واحدة أو حرف، ويمد ست حركات. وهو أربعة أنواع: كلمي مثقل (حرف المد بعده حرف مشدد)، كلمي مخفف (حرف المد بعده سكون غير مشدد)، حرفي مثقل، حرفي مخفف. سمي لازماً لأنه يلزم فيه المد بمقدار معين.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿الضَّالِّينَ﴾ - ﴿وَلاَ الضَّالِّينَ﴾ - ﴿الْحَاقَّةُ﴾ - ﴿وَالطُّورِ﴾ - ﴿وَالْمُرْسَلَاتِ﴾
+                        <br>﴿وَالْعَصْرِ﴾ - ﴿وَالْفَجْرِ﴾ - ﴿وَالشَّمْسِ﴾ - ﴿وَاللَّيْلِ﴾ - ﴿وَالضُّحَى﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/raRX4lLdJUg.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام القلقلة -->
+                <div class="tajweed-rule" data-category="qalqala">
+                    <h3 class="tajweed-title"><i class="fas fa-star tajweed-icon"></i> القلقلة</h3>
+                    <p class="tajweed-desc">
+                        القلقلة هي اهتزاز الصوت عند النطق بالحرف الساكن حتى يسمع له نبرة قوية، وحروفها خمسة مجموعة في كلمة "قطب جد". تكون القلقلة صغرى إذا كان الحرف في وسط الكلمة، وكبرى إذا كان في آخر الكلمة. والحروف هي: القاف، الطاء، الباء، الجيم، الدال.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿يَخْرُجْ﴾ - ﴿الْحَقّ﴾ - ﴿يَدْعُ﴾ - ﴿يَطْمَعُ﴾ - ﴿يَبْخَلُ﴾
+                        <br>﴿الْحِجْرْ﴾ - ﴿الْفَلَقْ﴾ - ﴿الْعَلَقْ﴾ - ﴿الْفَلَكْ﴾ - ﴿الْبَعْثُ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/3rWxKRZ9Q0Y.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الميم الساكنة -->
+                <div class="tajweed-rule" data-category="lam">
+                    <h3 class="tajweed-title"><i class="fas fa-volume-up tajweed-icon"></i> أحكام الميم الساكنة</h3>
+                    <p class="tajweed-desc">
+                        للميم الساكنة ثلاثة أحكام: الإخفاء الشفوي إذا جاء بعدها باء، الإدغام الشفوي إذا جاء بعدها ميم، والإظهار الشفوي إذا جاء بعدها أي حرف آخر غير الباء والميم. سمي شفوياً لأن الميم تخرج من الشفتين.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿هُمْ بِآيَاتِنَا﴾ - ﴿لَهُم مَّا﴾ - ﴿أَنْتُمْ عَلَى﴾ - ﴿عَلَيْهِمْ فَضْلًا﴾ - ﴿أَنْتُمْ بِهِ﴾
+                        <br>﴿تَرْمِيهِمْ بِحِجَارَةٍ﴾ - ﴿أَمْ لَهُمْ﴾ - ﴿عَلَيْهِمْ صَلَوَاتٌ﴾ - ﴿لَكُمْ دِينُكُمْ﴾ - ﴿وَلَهُمْ عَذَابٌ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/S-vH7vNnhiE.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام اللام الساكنة -->
+                <div class="tajweed-rule" data-category="lam">
+                    <h3 class="tajweed-title"><i class="fas fa-text-width tajweed-icon"></i> أحكام اللام الساكنة</h3>
+                    <p class="tajweed-desc">
+                        للام الساكنة ثلاثة أحكام: الإظهار إذا جاء بعدها أحد حروف "ء ه ع ح غ خ"، الإدغام إذا جاء بعدها لام أو راء، والإخفاء إذا جاء بعدها باقي الحروف. وتنقسم إلى قسمين: لام قمرية (حروفها مجموعة في "ابغ حجك وخف عقيمه") ولام شمسية (باقي الحروف).
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿الْحَمْدُ﴾ - ﴿قُلْ رَبِّ﴾ - ﴿بَلْ رَفَعَهُ﴾ - ﴿الْقُرْآنُ﴾ - ﴿الْعَالَمِينَ﴾
+                        <br>﴿الرَّحْمَٰنِ﴾ - ﴿الْغَافِرِينَ﴾ - ﴿الْخَالِقِينَ﴾ - ﴿الْحَكِيمُ﴾ - ﴿الْعَزِيزُ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/iawKFbQsUp4.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الغنة -->
+                <div class="tajweed-rule" data-category="ghunna">
+                    <h3 class="tajweed-title"><i class="fas fa-music tajweed-icon"></i> مراتب الغنة</h3>
+                    <p class="tajweed-desc">
+                        الغنة هي صوت خيشومي يخرج من الأنف عند النطق بالنون والميم المشددتين أو المخفاة. مدتها حركتان في النون والميم المشددتين، وأربع أو خمس حركات في الإدغام بغنة. وتنقسم إلى: غنة مشددة (في النون والميم المشددتين) وغنة غير مشددة (في الإخفاء والإقلاب).
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿إِنَّ﴾ - ﴿أُمَّةٌ﴾ - ﴿مِنْ نَفْسٍ﴾ - ﴿عَنَّا﴾ - ﴿مِنْ مَاءٍ﴾
+                        <br>﴿أَنْعَمْتَ﴾ - ﴿مِنْهُمْ﴾ - ﴿عَنْهُمْ﴾ - ﴿مِنْ مَرْقَدِنَا﴾ - ﴿أَنْبِئْهُمْ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/X5J8gMfH5NE.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- التفخيم والترقيق -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-volume-up tajweed-icon"></i> التفخيم والترقيق</h3>
+                    <p class="tajweed-desc">
+                        التفخيم هو تغليظ الحرف عند النطق به فيملأ الفم بصداه، والترقيق هو ترقيق الحرف عند النطق به. أحرف التفخيم الدائمة هي: خ، ص، ض، غ، ط، ق، ظ. وأحرف الترقيق الدائمة هي: البقية عدا هذه الأحرف. وحرف الراء له أحكام خاصة في التفخيم والترقيق.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿الْقُرْآنَ﴾ - ﴿الصَّالِحَاتِ﴾ - ﴿الضَّالِّينَ﴾ - ﴿الْخَيْرَ﴾ - ﴿الْغَافِرِينَ﴾
+                        <br>﴿الطَّاغُوتَ﴾ - ﴿الظَّالِمِينَ﴾ - ﴿الْحَمْدُ﴾ - ﴿الرَّحْمَٰنِ﴾ - ﴿الْعَالَمِينَ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/CBOiw1VdPWs.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- الوقف والابتداء -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-pause-circle tajweed-icon"></i> الوقف والابتداء</h3>
+                    <p class="tajweed-desc">
+                        الوقف هو قطع الصوت على الكلمة القرآنية زمناً يتنفس فيه القارئ بنية استئناف القراءة. أنواعه: التام (يكتمل المعنى)، الكافي (يكاد يكتمل المعنى)، الحسن (لا يخل بالمعنى)، القبيح (يخل بالمعنى). والابتداء يكون بكلمة واضحة المعنى تتناسب مع ما قبلها.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ﴾ - ﴿الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ﴾
+                        <br>﴿الرَّحْمَٰنِ الرَّحِيمِ﴾ - ﴿مَالِكِ يَوْمِ الدِّينِ﴾ - ﴿اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ﴾
+                        <br>﴿صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ﴾ - ﴿غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ﴾ - ﴿وَلَا الضَّالِّينَ﴾
+                        <br>﴿آمَنَ الرَّسُولُ﴾ - ﴿بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/1HEE4TMBud0.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- السكت -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-pause tajweed-icon"></i> السكت</h3>
+                    <p class="tajweed-desc">
+                        السكت هو قطع الصوت على الحرف دون تنفس بمقدار حركتين، ويكون على أربعة مواضع في القرآن: عند هاء السكت في آخر الكلمة، وعند التنوين المنصوب، وعند الواو والياء الساكنتين الموقوف عليهما. ومن أمثلته في سورة الكوثر ﴿إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ﴾.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿عِوَجًا﴾ - ﴿مَرْقَدِنَا﴾ - ﴿وَقِيلَ مَنْ﴾ - ﴿بَلْ رَانَ﴾ - ﴿وَقِيلَ مَنْ﴾
+                        <br>﴿مَا أَغْنَى﴾ - ﴿وَلَا يَنْفَعُ﴾ - ﴿إِنَّ شَانِئَكَ﴾ - ﴿هُوَ الْأَبْتَرُ﴾ - ﴿وَمَا أَدْرَاكَ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/rBA1twvL1MY.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الراء -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-text-height tajweed-icon"></i> أحكام الراء</h3>
+                    <p class="tajweed-desc">
+                        للراء أحكام خاصة في التفخيم والترقيق: تفخم الراء إذا كانت مفتوحة أو مضمومة، أو ساكنة بعد فتح أو ضم، أو إذا كانت ساكنة بعد كسر أصلي. وترقق الراء إذا كانت مكسورة أو ساكنة بعد كسر عارض، أو إذا كانت في آخر الكلمة بعد ياء ساكنة.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿رَبِّ﴾ - ﴿الرَّحْمَٰنِ﴾ - ﴿خَيْرٌ﴾ - ﴿الرِّجَالِ﴾ - ﴿الرِّبَا﴾
+                        <br>﴿مِرْيَةٌ﴾ - ﴿فِرْعَوْنَ﴾ - ﴿قِرْطَاسٍ﴾ - ﴿الذِّكْرِ﴾ - ﴿الْبَصِيرِ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/bz5fCmaX748.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الميم والنون المشددتين -->
+                <div class="tajweed-rule" data-category="ghunna">
+                    <h3 class="tajweed-title"><i class="fas fa-bold tajweed-icon"></i> الميم والنون المشددتين</h3>
+                    <p class="tajweed-desc">
+                        الميم والنون المشددتين يجب إظهار الغنة فيهما بمقدار حركتين، والغنة هي صوت رخيم يخرج من الخيشوم (الأنف) عند النطق بهما. يجب التأكد من تشديد الحرف مع الغنة الكاملة دون زيادة أو نقصان.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿إِنَّ﴾ - ﴿أُمَّةٌ﴾ - ﴿عَنَّا﴾ - ﴿مِنَّا﴾ - ﴿إِنَّا﴾
+                        <br>﴿إِنَّهُ﴾ - ﴿أَنَّهُ﴾ - ﴿مِنْهُمْ﴾ - ﴿عَنْهُمْ﴾ - ﴿إِنَّمَا﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/TcrnmAUgOF8.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام النون والميم الساكنتين -->
+                <div class="tajweed-rule" data-category="ghunna">
+                    <h3 class="tajweed-title"><i class="fas fa-volume-down tajweed-icon"></i> النون والميم الساكنتين</h3>
+                    <p class="tajweed-desc">
+                        النون والميم الساكنتين تظهر فيهما الغنة بمقدار حركتين إذا جاء بعدهما أي حرف من حروف الهجاء عدا حروف الإدغام والإخفاء. يجب إظهار الغنة بوضوح مع مراعاة عدم المبالغة في نطقها.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿أَنْعَمْتَ﴾ - ﴿مِنْهُمْ﴾ - ﴿عَنْهُمْ﴾ - ﴿مِنْ قَبْلِ﴾ - ﴿مِنْ بَعْدِ﴾
+                        <br>﴿أَنْزَلْنَا﴾ - ﴿مِنْ رَبِّهِمْ﴾ - ﴿عَنْ شَيْءٍ﴾ - ﴿مِنْ دُونِهِ﴾ - ﴿أَنْتُمْ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/zCY3n64fxN4.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام التاءات -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-font tajweed-icon"></i> أحكام التاءات</h3>
+                    <p class="tajweed-desc">
+                        للتاءات في القرآن ثلاثة أحكام: تاء مفتوحة (ت)، تاء مربوطة (ة)، تاء مرسومة (هاء في الرسم العثماني). تاء التأنيث المربوطة تقرأ هاء عند الوقف إلا إذا كانت في اسم علم مثل "فاطمة". التاء المرسومة هاء في المصحف تقرأ تاء في الوصل والوقف.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿رَحْمَةٌ﴾ - ﴿جَنَّاتٌ﴾ - ﴿نِعْمَةٌ﴾ - ﴿فَاطِمَةُ﴾ - ﴿زَكَوٰةٌ﴾
+                        <br>﴿رَحْمَتِ﴾ - ﴿جَنَّتِ﴾ - ﴿نِعْمَتِ﴾ - ﴿فَاطِمَةَ﴾ - ﴿زَكَوٰتِ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/uwaq5BW2jMQ.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام اللامات -->
+                <div class="tajweed-rule" data-category="lam">
+                    <h3 class="tajweed-title"><i class="fas fa-text-width tajweed-icon"></i> أحكام اللامات</h3>
+                    <p class="tajweed-desc">
+                        للامات في القرآن أحكام خاصة: لام الجلالة تفخم دائماً، لام الأمر ترقق إذا سبقت بكسر، لام التعريف (الشمسية والقمرية). لام الفعل والحرف تتبع ما قبلها في التفخيم والترقيق إلا إذا كانت ساكنة بعد كسر فترقق.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿اللهُ﴾ - ﴿لِيُنفِقْ﴾ - ﴿الرَّحْمَٰنِ﴾ - ﴿الْقُرْآنُ﴾ - ﴿الْحَمْدُ﴾
+                        <br>﴿الْعَالَمِينَ﴾ - ﴿الْغَافِرِينَ﴾ - ﴿الْخَالِقِينَ﴾ - ﴿الْحَكِيمُ﴾ - ﴿الْعَزِيزُ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/iawKFbQsUp4.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام المثلين والمتقاربين والمتجانسين -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-equals tajweed-icon"></i> أحكام المثلين والمتقاربين والمتجانسين</h3>
+                    <p class="tajweed-desc">
+                        المثلان: الحرفان المتماثلان في المخرج والصفة (مثل: تاء بعد تاء). المتقاربان: الحرفان المتقاربان في المخرج أو الصفة (مثل: لام وراء). المتجانسان: الحرفان المتفقان في المخرج ومتقاربان في الصفة (مثل: طاء وتاء). لكل منها أحكام خاصة في الإدغام والإظهار.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿قَدْ تَبَيَّنَ﴾ - ﴿بَلْ رَفَعَهُ﴾ - ﴿أُجِيبَتْ تِضْرَارُهَا﴾ - ﴿وَقِيلَ مَنْ﴾ - ﴿إِذْ ذَهَبَ﴾
+                        <br>﴿وَإِذْ دَخَلُوا﴾ - ﴿يَدْعُو﴾ - ﴿وَمَنْ يَعْمَلْ﴾ - ﴿فَمَنْ نَكَثَ﴾ - ﴿وَمَنْ يَغْلُلْ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/nxo7VJohIL0.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الميم الثقيلة والخفيفة -->
+                <div class="tajweed-rule" data-category="ghunna">
+                    <h3 class="tajweed-title"><i class="fas fa-weight tajweed-icon"></i> الميم الثقيلة والخفيفة</h3>
+                    <p class="tajweed-desc">
+                        الميم الثقيلة: الميم المشددة التي تظهر فيها الغنة بقوة. الميم الخفيفة: الميم الساكنة أو المتحركة العادية. الميم الثقيلة تكون في حالة التشديد فقط، بينما الميم الخفيفة في باقي الحالات. يجب إعطاء كل نوع حقه من الغنة والوضوح.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿أُمَّةٌ﴾ - ﴿مِنْ﴾ - ﴿عَلَيْهِمْ﴾ - ﴿أَنْتُمْ﴾ - ﴿عَنْهُمْ﴾
+                        <br>﴿مِنْهُمْ﴾ - ﴿أَمْ﴾ - ﴿عَلَيْهِمْ صَلَوَاتٌ﴾ - ﴿لَكُمْ دِينُكُمْ﴾ - ﴿وَلَهُمْ عَذَابٌ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp3s.shabakngy.com/m/new/if09Dr91aKI.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الهمزات -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-font tajweed-icon"></i> أحكام الهمزات</h3>
+                    <p class="tajweed-desc">
+                        للهمزات أحكام خاصة: همزة الوصل تثبت في الابتداء وتسقط في الوصل، همزة القطع تثبت في الحالين. همزة المتطرفة لها أحكام خاصة عند الوقف عليها. الهمزة بين بين هي حالة وسط بين الهمزة والألف عند وصل همزة الوصل بالساكن.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿اِقْرَأْ﴾ - ﴿الِاسْمُ﴾ - ﴿ءَأَعْجَمِيٌّ﴾ - ﴿ءَآلذَّكَرَيْنِ﴾ - ﴿ءَآللهُ﴾
+                        <br>﴿ءَآلْآنَ﴾ - ﴿ءَآلرَّحْمَٰنِ﴾ - ﴿ءَآلطَّاغُوتُ﴾ - ﴿ءَآلذِّكْرُ﴾ - ﴿ءَآلْكِتَابُ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/axNdgak-hlY.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام المد العارض للسكون -->
+                <div class="tajweed-rule" data-category="madd">
+                    <h3 class="tajweed-title"><i class="fas fa-clock tajweed-icon"></i> المد العارض للسكون</h3>
+                    <p class="tajweed-desc">
+                        المد العارض للسكون هو أن يأتي بعد حرف المد سكون عارض بسبب الوقف، ويمد حركتين أو أربع أو ست حسب الرواية. مثل: ﴿الرَّحْمَٰنِ﴾ عند الوقف تصبح ﴿الرَّحْمَٰنْ﴾ مع مد الألف بسبب السكون العارض.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿الرَّحْمَٰنِ﴾ - ﴿الْعَالَمِينَ﴾ - ﴿الدِّينِ﴾ - ﴿الرَّحِيمِ﴾ - ﴿الْمَلِكِ﴾
+                        <br>﴿الْقُدُوسِ﴾ - ﴿السَّلَامُ﴾ - ﴿الْمُؤْمِنُ﴾ - ﴿الْمُهَيْمِنُ﴾ - ﴿الْعَزِيزُ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp3s.shabakngy.com/m/new/WApb2sTfWFo.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام المد اللين -->
+                <div class="tajweed-rule" data-category="madd">
+                    <h3 class="tajweed-title"><i class="fas fa-arrows-alt-h tajweed-icon"></i> المد اللين</h3>
+                    <p class="tajweed-desc">
+                        المد اللين هو مد حرفي اللين (الواو والياء الساكنتين المفتوح ما قبلهما) عند الوقف عليهما بسكون عارض. يكون المد حركتين أو أكثر حسب الرواية. مثل: ﴿خَوْفٌ﴾ عند الوقف تصبح ﴿خَوْفْ﴾ مع مد الواو.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿خَوْفٌ﴾ - ﴿بَيْتٌ﴾ - ﴿نَوْمٌ﴾ - ﴿خَيْرٌ﴾ - ﴿شَيْءٌ﴾
+                        <br>﴿قَوْمٌ﴾ - ﴿يَوْمٌ﴾ - ﴿سَوْءٌ﴾ - ﴿دَعْوَى﴾ - ﴿عَيْنٌ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/M2b5HYvBW0s.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الوقف على المرسوم -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-stop-circle tajweed-icon"></i> الوقف على المرسوم</h3>
+                    <p class="tajweed-desc">
+                        الوقف على الرسم العثماني له أحكام خاصة: الوقف على التاء المربوطة بالهاء، الوقف على الألف المحذوفة رسمًا، الوقف على الياء المحذوفة رسمًا، الوقف على الواو المحذوفة رسمًا. يجب مراعاة الرسم العثماني عند الوقف واتباع القراءة المتواترة.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿رَحْمَةٌ﴾ - ﴿عَلَيْهِمُ﴾ - ﴿الْكِتَٰبُ﴾ - ﴿الرَّحْمَٰنِ﴾ - ﴿الْعَالَمِينَ﴾
+                        <br>﴿الدِّينِ﴾ - ﴿الْمَلِكِ﴾ - ﴿الْقُدُوسِ﴾ - ﴿السَّلَامُ﴾ - ﴿الْمُؤْمِنُ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/xtSIEqlj7G0.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام الفتحات والكسرات والضمة -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-language tajweed-icon"></i> أحكام الحركات</h3>
+                    <p class="tajweed-desc">
+                        لكل حركة (فتحة، ضمة، كسرة) أحكامها في التجويد: الفتحة تكون بانفراج الشفتين مع ظهور الصوت، الضمة بتكون الشفتين مع ظهور الصوت، الكسرة بتكون انخفاض الفك السفلي مع ظهور الصوت. يجب إعطاء كل حركة حقها من الوضوح والمدة.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿بِسْمِ﴾ - ﴿الرَّحْمَٰنِ﴾ - ﴿الرَّحِيمِ﴾ - ﴿الْحَمْدُ﴾ - ﴿لِلَّهِ﴾
+                        <br>﴿رَبِّ﴾ - ﴿الْعَالَمِينَ﴾ - ﴿الرَّحْمَٰنِ﴾ - ﴿الرَّحِيمِ﴾ - ﴿مَالِكِ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/jm_BpZIDyMM.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+
+                <!-- أحكام السكون -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-volume-mute tajweed-icon"></i> أحكام السكون</h3>
+                    <p class="tajweed-desc">
+                        السكون هو انقطاع الصوت عند النطق بالحرف، وله أحكام خاصة: السكون الأصلي (في الحرف الأصلي)، السكون العارض (لسبب الوقف)، السكون اللاحق (في الحروف التي لا تتحرك). يجب مراعاة عدم المبالغة في السكون أو تقصيره.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿قُلْ﴾ - ﴿مِنْ﴾ - ﴿عَنْ﴾ - ﴿إِنَّ﴾ - ﴿أَنْ﴾
+                        <br>﴿عَلَيْهِمْ﴾ - ﴿مِنْهُمْ﴾ - ﴿عَنْهُمْ﴾ - ﴿أَنْتُمْ﴾ - ﴿لَكُمْ﴾
+                    </div>
+                    
+                    <div class="tajweed-video-container">
+                        <iframe 
+                            width="100%"
+                            height="315"
+                            src="https://www.youtube.com/embed/7uteVyNYWZ8"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            title="شرح أحكام السكون">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- أحكام التشديد -->
+                <div class="tajweed-rule" data-category="others">
+                    <h3 class="tajweed-title"><i class="fas fa-bold tajweed-icon"></i> أحكام التشديد</h3>
+                    <p class="tajweed-desc">
+                        التشديد هو مضاعفة الحرف بحيث ينطق مرتين، الأولى ساكنة والثانية متحركة. يجب إعطاء الحرف المشدد حقه من القوة والوضوح مع مراعاة الغنة إذا كان من أحرف الغنة (النون والميم). التشديد قد يكون للضرورة الشعرية أو للدلالة على معنى خاص.
+                    </p>
+                    <div class="tajweed-example">
+                        ﴿إِنَّا﴾ - ﴿أُمَّةٌ﴾ - ﴿الضَّالِّينَ﴾ - ﴿الْحَاقَّةُ﴾ - ﴿الْمُدَّثِّرُ﴾
+                        <br>﴿الْمُزَّمِّلُ﴾ - ﴿الْقَارِعَةُ﴾ - ﴿الْحُطَمَةُ﴾ - ﴿الْمُنَافِقُونَ﴾ - ﴿الْمُشْرِكُونَ﴾
+                    </div>
+                    <div class="tajweed-audio-container">
+                        <audio controls class="tajweed-audio">
+                            <source src="https://mp4.shabakngy.com/m/m/2fVdbniumpU.mp3" type="audio/mpeg">
+                            متصفحك لا يدعم تشغيل الصوتيات.
+                        </audio>
+                    </div>
+                    <div class="rating-container">
+                        <i class="fas fa-star rating-star" data-rating="1"></i>
+                        <i class="fas fa-star rating-star" data-rating="2"></i>
+                        <i class="fas fa-star rating-star" data-rating="3"></i>
+                        <i class="fas fa-star rating-star" data-rating="4"></i>
+                        <i class="fas fa-star rating-star" data-rating="5"></i>
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="tab-content" id="tests">
+            <div class="interactive-test">
+                <h3 class="test-title"><i class="fas fa-question-circle"></i> اختبار أحكام التجويد التفاعلي</h3>
+                <p style="text-align: center; margin-bottom: 30px; line-height: 1.8;">اختبر معلوماتك في أحكام التجويد من خلال هذه الأسئلة التفاعلية، اختر الإجابة الصحيحة ثم اضغط على تأكيد للإنتقال للسؤال التالي</p>
+                
+                <div id="test-container">
+                    <div class="test-question" id="current-question"></div>
+                    
+                    <div class="test-options" id="options-container"></div>
+                    
+                    <div class="test-navigation">
+                        <button class="test-btn" id="prev-btn" disabled>
+                            <i class="fas fa-arrow-right"></i> السابق
+                        </button>
+                        <button class="test-btn" id="next-btn">
+                            التالي <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="test-btn" id="confirm-btn">
+                            <i class="fas fa-check"></i> تأكيد
+                        </button>
+                    </div>
+                    
+                    <div class="test-result" id="test-result"></div>
+                    <div class="test-score" id="test-score"></div>
+                    <button class="test-btn test-restart" id="restart-btn">
+                        <i class="fas fa-redo"></i> إعادة الاختبار
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span class="toast-message">تمت الإضافة إلى المفضلة بنجاح</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // نظام التبويبات
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    btn.classList.add('active');
+                    const tabId = btn.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                    
+                
+                    
+                    if (tabId === 'rules') {
+                        animateTajweedRules();
+                    } else if (tabId === 'tests') {
+                        initTest();
+                    }
+                });
+            });
+            
+            // تأثيرات الظهور لأحكام التجويد
+            function animateTajweedRules() {
+                const rules = document.querySelectorAll('.tajweed-rule');
+                rules.forEach((rule, index) => {
+                    setTimeout(() => {
+                        rule.classList.add('visible');
+                    }, index * 150);
+                });
+            }
+            
+            // تهيئة تأثيرات الظهور عند التحميل
+            animateTajweedRules();
+            
+            // نظام التقييم
+            const ratingStars = document.querySelectorAll('.rating-star');
+            
+            ratingStars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const container = this.parentElement;
+                    const stars = container.querySelectorAll('.rating-star');
+                    
+                    stars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                    
+                    showToast(`شكراً لتقييمك هذا الحكم بـ ${rating} نجوم`, 'success');
+                });
+            });
+            
+            // نظام التصفية
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const tajweedRules = document.querySelectorAll('.tajweed-rule');
+            
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+                    
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (filter === 'all') {
+                        tajweedRules.forEach(rule => {
+                            rule.style.display = 'block';
+                            rule.classList.add('visible');
+                        });
+                    } else {
+                        tajweedRules.forEach(rule => {
+                            if (rule.getAttribute('data-category') === filter) {
+                                rule.style.display = 'block';
+                                rule.classList.add('visible');
+                            } else {
+                                rule.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // زر التنزيل
+            const downloadBtn = document.querySelector('.download-btn');
+            
+            downloadBtn.addEventListener('click', function() {
+                showToast('جاري تحميل كتيب أحكام التجويد، الرجاء الانتظار...', 'success');
+                
+                setTimeout(() => {
+                    showToast('تم تنزيل الكتيب بنجاح', 'success');
+                }, 2000);
+            });
+            
+            // اختبارات تفاعلية
+            const questions = [
+                {
+                    question: "ما هو الحكم التجويدي للنون الساكنة في كلمة 'منْ ءامن'؟",
+                    options: ["الإظهار الحلقي", "الإدغام بغنة", "الإقلاب", "الإخفاء الحقيقي"],
+                    correct: 0,
+                    explanation: "الإظهار الحلقي هو الحكم الصحيح لأن بعد النون الساكنة حرف الهمزة وهو من حروف الحلق الستة (ء، هـ، ع، ح، غ، خ)"
+                },
+                {
+                    question: "ما هي حروف القلقلة؟",
+                    options: ["ق ط ب ج د", "خ ص ض غ ط", "ء ه ع ح غ", "س ص ز س"],
+                    correct: 0,
+                    explanation: "حروف القلقلة خمسة مجموعة في كلمة 'قطب جد' وهي: القاف، الطاء، الباء، الجيم، الدال"
+                },
+                {
+                    question: "كم حركة يكون المد الطبيعي؟",
+                    options: ["حركتان", "أربع حركات", "ست حركات", "حركة واحدة"],
+                    correct: 0,
+                    explanation: "المد الطبيعي مدته حركتان (قدر نطق 'لا إله' بسرعة معتدلة)"
+                },
+                {
+                    question: "ما هو حكم الميم الساكنة إذا جاء بعدها حرف الباء؟",
+                    options: ["الإخفاء الشفوي", "الإدغام الشفوي", "الإظهار الشفوي", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإخفاء الشفوي هو حكم الميم الساكنة إذا جاء بعدها باء مع ظهور الغنة"
+                },
+                {
+                    question: "ما هي أحكام النون الساكنة والتنوين؟",
+                    options: ["الإظهار، الإدغام، الإقلاب، الإخفاء", "التفخيم، الترقيق، المد، القصر", "الوقف، الابتداء، السكت، القطع", "الجهر، الهمس، الشدة، الرخاوة"],
+                    correct: 0,
+                    explanation: "أحكام النون الساكنة والتنوين أربعة: الإظهار، الإدغام، الإقلاب، الإخفاء"
+                },
+                {
+                    question: "ما هو حكم النون الساكنة في كلمة 'منْ نعمة'؟",
+                    options: ["الإدغام بغنة", "الإظهار الحلقي", "الإخفاء الحقيقي", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإدغام بغنة هو الحكم الصحيح لأن بعد النون الساكنة حرف النون وهو من حروف 'ينمو'"
+                },
+                {
+                    question: "ما هو حكم النون الساكنة في كلمة 'أنْبِئْهُم'؟",
+                    options: ["الإقلاب", "الإدغام بغنة", "الإظهار الحلقي", "الإخفاء الحقيقي"],
+                    correct: 0,
+                    explanation: "الإقلاب هو الحكم الصحيح لأن بعد النون الساكنة حرف الباء"
+                },
+                {
+                    question: "ما هو حكم النون الساكنة في كلمة 'منْ ثَمَرات'؟",
+                    options: ["الإخفاء الحقيقي", "الإظهار الحلقي", "الإدغام بغنة", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإخفاء الحقيقي هو الحكم الصحيح لأن بعد النون الساكنة حرف الثاء وهو من حروف الإخفاء"
+                },
+                {
+                    question: "ما هو المد الذي يأتي بسبب الهمز؟",
+                    options: ["المد المتصل", "المد المنفصل", "المد اللازم", "المد الطبيعي"],
+                    correct: 0,
+                    explanation: "المد المتصل هو الذي يأتي بسبب الهمز في كلمة واحدة مثل 'جاء'"
+                },
+                {
+                    question: "ما هو المد الذي يأتي بسبب السكون؟",
+                    options: ["المد العارض للسكون", "المد المنفصل", "المد المتصل", "المد الطبيعي"],
+                    correct: 0,
+                    explanation: "المد العارض للسكون هو الذي يأتي بسبب السكون العارض عند الوقف"
+                },
+                {
+                    question: "ما هي حروف الإظهار الحلقي؟",
+                    options: ["ء، هـ، ع، ح، غ، خ", "ي، ر، م، ل، و، ن", "ق، ط، ب، ج، د", "ص، ذ، ث، ك، ج، ش"],
+                    correct: 0,
+                    explanation: "حروف الإظهار الحلقي ستة: الهمزة، الهاء، العين، الحاء، الغين، الخاء"
+                },
+                {
+                    question: "ما هي حروف الإخفاء الحقيقي؟",
+                    options: ["ص، ذ، ث، ك، ج، ش، ق، س، د، ط، ز، ف، ت، ض، ظ", "ء، هـ، ع، ح، غ، خ", "ي، ن، م، و", "ب"],
+                    correct: 0,
+                    explanation: "حروف الإخفاء الحقيقي خمسة عشر حرفاً وهي: ص، ذ، ث، ك، ج، ش، ق، س، د، ط، ز، ف، ت، ض، ظ"
+                },
+                {
+                    question: "ما هو حكم الميم الساكنة إذا جاء بعدها حرف الميم؟",
+                    options: ["الإدغام الشفوي", "الإخفاء الشفوي", "الإظهار الشفوي", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإدغام الشفوي هو حكم الميم الساكنة إذا جاء بعدها ميم مع ظهور الغنة"
+                },
+                {
+                    question: "ما هو حكم الميم الساكنة إذا جاء بعدها حرف الفاء؟",
+                    options: ["الإظهار الشفوي", "الإخفاء الشفوي", "الإدغام الشفوي", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإظهار الشفوي هو حكم الميم الساكنة إذا جاء بعدها أي حرف غير الباء والميم"
+                },
+                {
+                    question: "ما هي أنواع المد؟",
+                    options: ["طبيعي، متصل، منفصل، لازم، عارض للسكون", "كبير، متوسط، صغير", "طويل، قصير، متوسط", "قوي، ضعيف، متوسط"],
+                    correct: 0,
+                    explanation: "أنواع المد خمسة: الطبيعي، المتصل، المنفصل، اللازم، العارض للسكون"
+                },
+                {
+                    question: "ما هو حكم اللام الساكنة في كلمة 'الْحَمْدُ'؟",
+                    options: ["الإظهار القمري", "الإدغام", "الإخفاء", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإظهار القمري هو حكم اللام الساكنة إذا جاء بعدها أحد حروف 'ابغ حجك وخف عقيمه'"
+                },
+                {
+                    question: "ما هو حكم اللام الساكنة في كلمة 'الرَّحْمَٰنِ'؟",
+                    options: ["الإدغام", "الإظهار القمري", "الإخفاء", "الإقلاب"],
+                    correct: 0,
+                    explanation: "الإدغام هو حكم اللام الساكنة إذا جاء بعدها حرف الراء"
+                },
+                {
+                    question: "ما هي حروف التفخيم؟",
+                    options: ["خ، ص، ض، غ، ط، ق، ظ", "ء، هـ، ع، ح", "ي، ر، م، ل، و، ن", "ب، ت، ث، ج"],
+                    correct: 0,
+                    explanation: "حروف التفخيم سبعة: الخاء، الصاد، الضاد، الغين، الطاء، القاف، الظاء"
+                },
+                {
+                    question: "ما هو حكم الراء في كلمة 'رَبِّ'؟",
+                    options: ["التفخيم", "الترقيق", "الإدغام", "الإخفاء"],
+                    correct: 0,
+                    explanation: "التفخيم هو حكم الراء إذا كانت مفتوحة أو مضمومة"
+                },
+                {
+                    question: "ما هو حكم الراء في كلمة 'رِزْقًا'؟",
+                    options: ["الترقيق", "التفخيم", "الإدغام", "الإخفاء"],
+                    correct: 0,
+                    explanation: "الترقيق هو حكم الراء إذا كانت مكسورة"
+                }
+            ];
+
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let selectedOption = null;
+            let shuffledQuestions = [];
+            
+            const questionElement = document.getElementById('current-question');
+            const optionsContainer = document.getElementById('options-container');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const confirmBtn = document.getElementById('confirm-btn');
+            const resultElement = document.getElementById('test-result');
+            const scoreElement = document.getElementById('test-score');
+            const restartBtn = document.getElementById('restart-btn');
+            
+            function initTest() {
+                // خلط الأسئلة عشوائياً
+                shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
+                currentQuestionIndex = 0;
+                score = 0;
+                loadQuestion();
+            }
+            
+            function loadQuestion() {
+                if (currentQuestionIndex >= shuffledQuestions.length) {
+                    showResults();
+                    return;
+                }
+                
+                const question = shuffledQuestions[currentQuestionIndex];
+                questionElement.textContent = `${currentQuestionIndex + 1}. ${question.question}`;
+                
+                optionsContainer.innerHTML = '';
+                
+                // خلط الخيارات عشوائياً
+                const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+                
+                shuffledOptions.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'test-option';
+                    optionElement.innerHTML = `<i class="fas fa-circle"></i> ${option}`;
+                    optionElement.addEventListener('click', () => selectOption(optionElement, option));
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                prevBtn.disabled = currentQuestionIndex === 0;
+                nextBtn.disabled = currentQuestionIndex === shuffledQuestions.length - 1;
+                confirmBtn.style.display = 'block';
+                resultElement.style.display = 'none';
+                scoreElement.style.display = 'none';
+                restartBtn.style.display = 'none';
+                selectedOption = null;
+            }
+            
+            function selectOption(optionElement, option) {
+                document.querySelectorAll('.test-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                optionElement.classList.add('selected');
+                selectedOption = option;
+            }
+            
+            function checkAnswer() {
+                if (selectedOption === null) {
+                    showToast('الرجاء اختيار إجابة قبل التأكيد', 'warning');
+                    return;
+                }
+                
+                const question = shuffledQuestions[currentQuestionIndex];
+                const options = document.querySelectorAll('.test-option');
+                
+                options.forEach(option => {
+                    const optionText = option.textContent.trim();
+                    
+                    if (optionText === question.options[question.correct]) {
+                        option.classList.add('correct');
+                    } else if (optionText === selectedOption) {
+                        option.classList.add('wrong');
+                    }
+                });
+                
+                if (selectedOption === question.options[question.correct]) {
+                    score++;
+                    resultElement.textContent = 'إجابة صحيحة! أحسنت!';
+                } else {
+                    resultElement.textContent = `إجابة خاطئة، الإجابة الصحيحة هي: ${question.options[question.correct]}. ${question.explanation}`;
+                }
+                
+                confirmBtn.style.display = 'none';
+                resultElement.style.display = 'block';
+                
+                // الانتقال التلقائي للسؤال التالي بعد 3 ثواني
+                setTimeout(() => {
+                    nextQuestion();
+                }, 3000);
+            }
+            
+            function nextQuestion() {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < shuffledQuestions.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }
+            
+            function prevQuestion() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    loadQuestion();
+                }
+            }
+            
+            function showResults() {
+                questionElement.textContent = 'انتهى الاختبار!';
+                optionsContainer.innerHTML = '';
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                confirmBtn.style.display = 'none';
+                resultElement.style.display = 'none';
+                
+                const percentage = Math.round((score / shuffledQuestions.length) * 100);
+                let message = '';
+                
+                if (percentage >= 80) {
+                    message = 'ممتاز! أنت متقن لأحكام التجويد';
+                } else if (percentage >= 60) {
+                    message = 'جيد جداً! لديك معرفة جيدة بأحكام التجويد';
+                } else if (percentage >= 40) {
+                    message = 'ليس سيئاً، ولكن تحتاج إلى مزيد من الدراسة';
+                } else {
+                    message = 'يحتاج إلى تحسين، راجع أحكام التجويد وحاول مرة أخرى';
+                }
+                
+                scoreElement.textContent = `${message} - النتيجة: ${score} من ${shuffledQuestions.length} (${percentage}%)`;
+                scoreElement.style.display = 'block';
+                restartBtn.style.display = 'block';
+            }
+            
+            function restartTest() {
+                initTest();
+            }
+            
+            prevBtn.addEventListener('click', prevQuestion);
+            nextBtn.addEventListener('click', nextQuestion);
+            confirmBtn.addEventListener('click', checkAnswer);
+            restartBtn.addEventListener('click', restartTest);
+            
+            // بدء الاختبار الأولي
+            initTest();
+            
+            // وظيفة عرض الإشعارات
+            function showToast(message, type = 'success') {
+                const toast = document.querySelector('.toast');
+                const toastIcon = toast.querySelector('i');
+                const toastMessage = toast.querySelector('.toast-message');
+                
+                toast.className = 'toast';
+                toast.classList.add(type);
+                
+                switch(type) {
+                    case 'success':
+                        toastIcon.className = 'fas fa-check-circle';
+                        break;
+                    case 'warning':
+                        toastIcon.className = 'fas fa-exclamation-circle';
+                        break;
+                    case 'error':
+                        toastIcon.className = 'fas fa-times-circle';
+                        break;
+                    default:
+                        toastIcon.className = 'fas fa-info-circle';
+                }
+                
+                toastMessage.textContent = message;
+                toast.classList.add('active');
+                
+                setTimeout(() => {
+                    toast.classList.remove('active');
+                }, 3000);
+            }
+            
+            // تأثيرات عند التمرير
+            window.addEventListener('scroll', function() {
+                const rules = document.querySelectorAll('.tajweed-rule');
+                const windowHeight = window.innerHeight;
+                
+                rules.forEach(rule => {
+                    const rulePosition = rule.getBoundingClientRect().top;
+                    
+                    if (rulePosition < windowHeight - 100) {
+                        rule.classList.add('visible');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
